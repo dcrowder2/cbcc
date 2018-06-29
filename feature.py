@@ -123,34 +123,11 @@ if __name__ == '__main__':
 	t_time = time.time()
 	print("Images loaded:" + str(t_time - start_time))
 	total_time = t_time
-	total_patch_time = 0
-	total_color_time = 0
-	total_texture_time = 0
 	temp = images[0]
 	for i in range(0, 2592):  # TODO: add parallelism, saving of the features
-		row_time = time.time()
-		row_patch_time = 0
-		row_color_time = 0
-		row_texture_time = 0
 		for j in range(0, 3888):
 			center_pixel = (i, j)
-			prev_time = time.time()
 			patch, pixel = get_patch(center_pixel, temp)
-			current_time = time.time()
-			row_patch_time += current_time - prev_time
-			prev_time = time.time()
 			descriptor_color = get_dominate_color(patch)
-			row_color_time += time.time() - prev_time
-			prev_time = time.time()
 			descriptor_texture = get_texture(patch, pixel, radial)
-			row_texture_time += time.time() - prev_time
-			prev_time = time.time()
-		print("Row " + str(i) + " time is : " + str(prev_time - row_time) + " secs")
-		print("Row patch time: " + str(row_patch_time) + "\nRow color time: " + str(row_color_time) + "\nRow texture "
-				"time: " + str(row_texture_time) + "\n\n")
-		total_patch_time += row_patch_time
-		total_color_time += row_color_time
-		total_texture_time += row_texture_time
 	print("Final time: " + str(time.time() - total_time))
-	print("Total patch time: " + str(total_patch_time) + "\nTotal color time: " + str(total_color_time) + "\nTotal texture "
-		"time: " + str(total_texture_time))
