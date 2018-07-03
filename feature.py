@@ -143,7 +143,6 @@ def run_pixels(image, data):
 		patch, pixel = get_patch(coordinate, image, h, w)
 		descriptor_color = k_means_color(patch)
 		descriptor_texture = get_texture(patch, pixel, radial)
-		array.extend(coordinate)
 		array.extend(descriptor_texture)
 		array.extend(descriptor_color[0])
 		array.extend(descriptor_color[1])
