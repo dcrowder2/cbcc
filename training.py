@@ -35,7 +35,7 @@ if __name__ == '__main__':
 	test = np.concatenate((labeled_rust[201:251], labeled_no_rust[201:251])).astype(int)
 	np.random.shuffle(training)
 	np.random.shuffle(test)
-	np.savetxt("training.txt", training, fmt='%-10.1i')
+	np.savetxt("training.txt", training, fmt='%-5.1i')
 	np.savetxt("test.txt", test, fmt='%-5.1i')
 	t_time = time.time()
 	print('EXECUTION TIME: %.4f ' % (t_time - start_time))
