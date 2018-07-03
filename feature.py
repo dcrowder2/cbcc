@@ -4,7 +4,7 @@ import os
 import time
 
 
-# removed this from get texture, as it will always be the same for each texture
+# Gets the p points in a circle with a radius specified, this will be passed to get_texture
 def radial_points():
 	radius = 3  # Used to get the neighbors, needs to be smaller than the patch radius
 	p = 8  # total number of neighbors selected
@@ -147,7 +147,7 @@ def run_pixels(image, data):
 		array.extend(descriptor_color[0])
 		array.extend(descriptor_color[1])
 		return_array.append(array)
-	return return_array
+	return np.array(return_array)
 
 
 # The rest of the code is for running an entire folder of images
