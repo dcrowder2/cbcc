@@ -104,7 +104,7 @@ def get_dominate_color(patch):
 def get_texture(patch, pixel, radial):
 	c_b, c_g, c_r = patch[pixel[0], pixel[1]]  # The rgb values of the center pixel
 	neighbor = [[], [], []]
-	if pixel[0] < 6 or pixel[1] < 6 or pixel[0] > 6 or pixel[1] > 6:  # With the center not being the actual center,
+	if pixel[0] != 6 or pixel[1] != 6:  # With the center not being the actual center,
 		# neighbors are chosen at random
 		x = np.random.choice(12, 8)  # Very Important!! This needs to go to the size of the patch,
 		y = np.random.choice(12, 8)  # which is done manually, so if the size of the patch is changed this
@@ -119,18 +119,25 @@ def get_texture(patch, pixel, radial):
 		neighbor[0].append(r)
 		neighbor[1].append(g)
 		neighbor[2].append(b)
+	# remaking the neighbors into a numpy array, and changing them to a 32 bit int instead of the 8 bit int of rgb
+	# values so they can be negative
 	neighbor = np.array(neighbor).astype(int)
+	# getting the difference from the neighbors color and the center pixels color
 	diff = [neighbor[0] - c_r, neighbor[1] - c_g, neighbor[2] - c_b]
+	# splitting the difference into positive results and negative results
 	pos_diff = np.array([diff[0][diff[0] > 0], diff[1][diff[1] > 0], diff[2][diff[2] > 0]])
 	neg_diff = np.array([diff[0][diff[0] < 0], diff[1][diff[1] < 0], diff[2][diff[2] < 0]])
+	# returning the sum of the square of each array for the different color channels and positive and negative
+	# differences
 	return [np.sum(pos_diff[0] ** 2), np.sum(pos_diff[1] ** 2), np.sum(pos_diff[2] ** 2), np.sum(neg_diff[0] ** 2),
 	        np.sum(neg_diff[1] ** 2), np.sum(neg_diff[2] ** 2)]
 
 
-def run_pixels(image, coordinates):
-	h, w = image.shape[:2]
+def run_pixels(image, data):
+	h, w = image.shape[:2]  # getting the height and width of the image for the patch calculations
 	radial = radial_points()
 	return_array = []
+	coordinates = data[:, 1:]  # removing the label for the data
 	for coordinate in coordinates:
 		array = []
 		patch, pixel = get_patch(coordinate, image, h, w)
