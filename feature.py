@@ -150,6 +150,24 @@ def run_pixels(image, data):
 	return np.array(return_array)
 
 
+def run_image(image):
+	h, w = image.shape[:2]  # getting the height and width of the image for the patch calculations
+	radial = radial_points()
+	return_array = []
+	for i in range(h):
+		for j in range(w):
+			coordinate = (i, j)
+			array = []
+			patch, pixel = get_patch(coordinate, image, h, w)
+			descriptor_color = k_means_color(patch)
+			descriptor_texture = get_texture(patch, pixel, radial)
+			array.extend(descriptor_texture)
+			array.extend(descriptor_color[0])
+			array.extend(descriptor_color[1])
+			return_array.append(array)
+	return np.array(return_array)
+
+
 # The rest of the code is for running an entire folder of images
 # def init(filepath):
 # 	for image in os.walk(filepath):
