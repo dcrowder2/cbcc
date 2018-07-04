@@ -22,7 +22,7 @@ if __name__ == '__main__':
 	if len(sys.argv) == 2:
 		ground_truth_path = sys.argv[1]
 	else:
-		ground_truth_path = "B:\\cbcc\\labelled1\\image001gt.jpg"
+		ground_truth_path = "B:\\cbcc\\labelled1\\image047gt.jpg"
 	start_time = time.time()
 	ground_truth = cv2.imread(ground_truth_path)
 	rust, no_rust = split_pixels(ground_truth)
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 	np.random.shuffle(rust)
 	np.random.shuffle(no_rust)
 	labeled_rust = np.insert(rust, 0, 1, axis=1)
-	labeled_no_rust = np.insert(no_rust, 0, 0, axis=1)
+	labeled_no_rust = np.insert(no_rust, 0, -1, axis=1)
 	training = np.concatenate((labeled_rust[:200], labeled_no_rust[:200])).astype(int)
 	test = np.concatenate((labeled_rust[201:251], labeled_no_rust[201:251])).astype(int)
 	np.random.shuffle(training)
