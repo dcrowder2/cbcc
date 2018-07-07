@@ -17,6 +17,17 @@ def split_pixels(label):
 	return np.array(positive), np.array(negative)
 
 
+# For running this script from another one
+def get_pixels(image):
+	positive, negative = split_pixels(image)
+	np.random.shuffle(positive)
+	np.random.shuffle(negative)
+	labeled_positive = np.insert(positive, 0, 1, axis=1)
+	labeled_negative = np.insert(negative, 0, -1, axis=1)
+	pixels = np.concatenate((labeled_positive[:200], labeled_negative[:200])).astype(int)
+	return pixels
+
+
 if __name__ == '__main__':
 	# If you run this code via CLI the input needs to be the image of the groundtruth
 	if len(sys.argv) == 2:
