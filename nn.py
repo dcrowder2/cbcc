@@ -19,7 +19,7 @@ def train(image, network, pixels):
 	labels = pixels[:, 0].reshape(-1, 1)
 
 	# running the training using Keras
-	return network.fit(data, labels, epochs=5000, batch_size=150)
+	return network.fit(data, labels, epochs=5000, batch_size=150, verbose=0)
 
 
 def test(image, network, pixels):
@@ -59,8 +59,13 @@ def get_grayscale(array):
 	return np.array(temp).reshape((h, w)).astype(np.uint8)
 
 
+def update_model(image, train_pix, network):
+
+	return train(image, network, train_pix)
+
+
 if __name__ == '__main__':
-	if len(sys.argv) == 4:
+	if len(sys.argv) == 5:
 		# the first argument will always be the training data
 		train_pixels = np.genfromtxt(sys.argv[1]).astype(int)
 		# the second argument will always be the test data
@@ -73,16 +78,16 @@ if __name__ == '__main__':
 
 		# the input layer is a dense, fully connected, layer with 100 neurons with softsign activation and 12 inputs
 		# softsign activation is x/(abs(x) + 1)
-		model.add(Dense(100, activation='softsign', input_dim=12, kernel_initializer='uniform'))
+		model.add(Dense(100, activation='tanh', input_dim=12, kernel_initializer='uniform'))
 		# dropout randomly sets input units to 0 during training time to help prevent overfitting
 		model.add(Dropout(0.5))
 
 		# the hidden layer is 100 neurons with softsign activation
-		model.add(Dense(100, activation='softsign', kernel_initializer='uniform'))
+		model.add(Dense(100, activation='tanh', kernel_initializer='uniform'))
 		model.add(Dropout(0.5))
 
 		# the output layer is only one neuron, for binary classification, and uses softsign for the activation
-		model.add(Dense(1, activation='softsign', kernel_initializer='uniform'))
+		model.add(Dense(1, activation='tanh', kernel_initializer='uniform'))
 
 		# compile the network with loss, or what to minimize, being the mean squared error, and the optimizer,
 		# or what the network uses to improve, being stochastic gradient descent, and what to report as the
@@ -99,14 +104,14 @@ if __name__ == '__main__':
 
 		accuracy = test(base_image, model, test_pixels)
 		print(accuracy)
-		model.save('nn.h5')
+		model.save(sys.argv[4])
 
-	elif len(sys.argv) == 2:
-		model = keras.models.load_model('nn.h5')
+	elif len(sys.argv) == 3:
+		model = keras.models.load_model(sys.argv[2])
 		base_image = cv2.imread(sys.argv[1])
 		generate_prediction(base_image, model)
 
 	else:
 		print("Please use the correct input of:")
-		print("nn.py <training_pixels.txt> <test_pixels.txt> <image.jpg>")
-		print("or nn.py <image.jpg>")
+		print("nn.py <training_pixels.txt> <test_pixels.txt> <image.jpg> <save_name.h5>")
+		print("or nn.py <image.jpg> <neural_network.h5>")
