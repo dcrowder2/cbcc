@@ -11,7 +11,7 @@ from keras.layers import Dense, Dropout
 
 # This is used when calling the nn.py with multiple data sets, as it is for training the neural network with the
 # select pixels
-def train(image, network, pixels):
+def train(image, network, pixels, v):
 	# The features will be [6 texture, 6 color], see feature.py to see what the descriptors are
 	data = feature.run_pixels(image, pixels)
 
@@ -19,7 +19,7 @@ def train(image, network, pixels):
 	labels = pixels[:, 0].reshape(-1, 1)
 
 	# running the training using Keras
-	return network.fit(data, labels, epochs=5000, batch_size=150, verbose=0)
+	return network.fit(data, labels, epochs=5000, batch_size=150 , verbose=v)
 
 
 def test(image, network, pixels):
@@ -53,15 +53,15 @@ def get_grayscale(array):
 		for j in range(w):
 			tp = array[i, j]
 			if tp == 1:
-				temp.append(255)
-			else:
 				temp.append(0)
+			else:
+				temp.append(255)
 	return np.array(temp).reshape((h, w)).astype(np.uint8)
 
 
 def update_model(image, train_pix, network):
 
-	return train(image, network, train_pix)
+	return train(image, network, train_pix, 0)
 
 
 if __name__ == '__main__':
@@ -80,11 +80,11 @@ if __name__ == '__main__':
 		# softsign activation is x/(abs(x) + 1)
 		model.add(Dense(100, activation='tanh', input_dim=12, kernel_initializer='uniform'))
 		# dropout randomly sets input units to 0 during training time to help prevent overfitting
-		model.add(Dropout(0.5))
+		model.add(Dropout(0.65))
 
 		# the hidden layer is 100 neurons with softsign activation
 		model.add(Dense(100, activation='tanh', kernel_initializer='uniform'))
-		model.add(Dropout(0.5))
+		model.add(Dropout(0.65))
 
 		# the output layer is only one neuron, for binary classification, and uses softsign for the activation
 		model.add(Dense(1, activation='tanh', kernel_initializer='uniform'))
@@ -94,7 +94,7 @@ if __name__ == '__main__':
 		# performance of the network being the accuracy
 		model.compile(loss='binary_crossentropy', optimizer='adadelta', metrics=['accuracy'])
 
-		history = train(base_image, model, train_pixels)
+		history = train(base_image, model, train_pixels, 1)
 
 		plt.plot(history.history['acc'])
 		plt.title('model accuracy')
