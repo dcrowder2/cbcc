@@ -146,6 +146,7 @@ def run_pixels(image, data):
 		array.extend(descriptor_texture)
 		array.extend(descriptor_color[0])
 		array.extend(descriptor_color[1])
+		# array.extend(descriptor_color[2]) for running with 3 dominate colors
 		return_array.append(array)
 	return np.array(return_array)
 
@@ -164,6 +165,7 @@ def run_image(image):
 			array.extend(descriptor_texture)
 			array.extend(descriptor_color[0])
 			array.extend(descriptor_color[1])
+			# array.extend(descriptor_color[2]) For running with 3 dominate colors
 			return_array.append(array)
 	return np.array(return_array)
 
