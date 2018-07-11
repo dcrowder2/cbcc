@@ -153,7 +153,7 @@ def run_pixels(image, data):
 		descriptor_texture = get_texture(patch, pixel, radial)
 		texture.append(descriptor_texture)
 		color.append(np.concatenate((descriptor_color[0], descriptor_color[1])))
-	normal = preprocessing.normalize(texture, axis=0) * 1000
+	normal = preprocessing.normalize(texture, axis=0)
 	return_array.extend(np.concatenate((normal, color), axis=1))
 	return np.array(return_array)
 
@@ -173,7 +173,7 @@ def run_image(image):
 			descriptor_texture = get_texture(patch, pixel, radial)
 			texture.append(descriptor_texture)
 			color.append(np.concatenate((descriptor_color[0], descriptor_color[1])))
-	normal = preprocessing.normalize(texture, axis=0) * 1000
+	normal = preprocessing.normalize(texture, axis=0)
 	return_array.extend(np.concatenate((normal, color), axis=1))
 	return np.array(return_array)
 
