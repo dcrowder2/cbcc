@@ -129,7 +129,7 @@ def get_texture(patch, pixel, radial):
 	pos_diff = np.array([diff[0][diff[0] > 0], diff[1][diff[1] > 0], diff[2][diff[2] > 0]])
 	neg_diff = np.array([diff[0][diff[0] < 0], diff[1][diff[1] < 0], diff[2][diff[2] < 0]])
 	# returning the sum of the square of each array for the different color channels and positive and negative
-	# differences normalized to 0 to 255
+	# differences
 	sum_1 = np.sum(pos_diff[0] ** 2)
 	sum_2 = np.sum(pos_diff[1] ** 2)
 	sum_3 = np.sum(pos_diff[2] ** 2)
