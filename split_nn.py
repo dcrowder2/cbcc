@@ -65,9 +65,9 @@ def get_grayscale(array):
 	return np.array(temp).reshape((h, w)).astype(np.uint8)
 
 
-def update_model(image, train_pix, color, texture, combine):
+def update_model(image, train_pix, color, texture, combine, matrix):
 
-	return train(image, train_pix, 0, color, texture, combine)
+	return train(image, train_pix, 0, color, texture, combine, matrix)
 
 
 if __name__ == '__main__':
