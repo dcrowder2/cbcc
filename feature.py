@@ -101,7 +101,6 @@ def get_texture(sd_patch):
 	b_values, b_counts = np.unique(blue, return_counts=True)
 	g_values, g_counts = np.unique(green, return_counts=True)
 
-	divisor = 13 * 13 * 8  # 13^2 is the size of the patch, and 8 is the number of neighbors
 
 	r_neg_len = len(r_values[r_values < 0])
 	b_neg_len = len(b_values[b_values < 0])
@@ -110,20 +109,29 @@ def get_texture(sd_patch):
 	r_neg_count = r_counts[:r_neg_len]
 	r_pos_count = r_counts[r_neg_len:]
 
+	r_neg_divisor = np.sum(r_neg_count)
+	r_pos_divisor = np.sum(r_pos_count)
+
 	b_neg_count = b_counts[:b_neg_len]
 	b_pos_count = b_counts[b_neg_len:]
+
+	b_neg_divisor = np.sum(b_neg_count)
+	b_pos_divisor = np.sum(b_pos_count)
 
 	g_neg_count = g_counts[:g_neg_len]
 	g_pos_count = g_counts[g_neg_len:]
 
-	r_neg_prob = r_neg_count / divisor
-	r_pos_prob = r_pos_count / divisor
+	g_neg_divisor = np.sum(g_neg_count)
+	g_pos_divisor = np.sum(g_pos_count)
 
-	b_neg_prob = b_neg_count / divisor
-	b_pos_prob = b_pos_count / divisor
+	r_neg_prob = r_neg_count / r_neg_divisor
+	r_pos_prob = r_pos_count / r_pos_divisor
 
-	g_neg_prob = g_neg_count / divisor
-	g_pos_prob = g_pos_count / divisor
+	b_neg_prob = b_neg_count / b_neg_divisor
+	b_pos_prob = b_pos_count / b_pos_divisor
+
+	g_neg_prob = g_neg_count / g_neg_divisor
+	g_pos_prob = g_pos_count / g_pos_divisor
 	return np.array([np.sum(r_neg_prob**2), np.sum(r_pos_prob**2), np.sum(b_neg_prob**2), np.sum(b_pos_prob**2),
 	                 np.sum(g_neg_prob**2), np.sum(g_pos_prob**2)])
 
